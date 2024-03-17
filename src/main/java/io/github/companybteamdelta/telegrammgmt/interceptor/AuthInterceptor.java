@@ -3,19 +3,22 @@ package io.github.companybteamdelta.telegrammgmt.interceptor;
 import io.github.companybteamdelta.telegrammgmt.repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public AuthInterceptor(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String apiKey = request.getHeader("Authorization");
+        String authHeader = request.getHeader("Authorization");
+        String apiKey = authHeader != null ? authHeader.split(" ")[1] : null;
 
         if (apiKey == null || !userRepository.existsByApiKey(apiKey)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
