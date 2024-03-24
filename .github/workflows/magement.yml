@@ -55,17 +55,12 @@ jobs:
     - name: copy build
       run: |
         ls -a
-        cp data-processor/build/libs/data-processor-0.0.1-SNAPSHOT.jar ./terraform/data-processor/
+        cp processor/data-processor/build/libs/data-processor-0.0.1-SNAPSHOT.jar ./terraform/data-processor/
 
     - name: copy management build
       run: |
         ls -a
-        cp telegram-management/build/libs/telegram-mgmt-0.0.1-SNAPSHOT.jar ./terraform/data-processor/
-
-    - name: Build telegram-management with Gradle
-      working-directory: ./data-processor
-      run: |
-        ./gradlew build -x test
+        cp build/libs/telegram-mgmt-0.0.1-SNAPSHOT.jar ./terraform/data-processor/
         
     - name: Build Docker image
       run: |
